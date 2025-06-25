@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+
+.vs/
+packages/
+x64/
+pdf2cvb/x64/
