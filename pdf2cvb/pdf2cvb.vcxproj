@@ -128,7 +128,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="pdf2cvb.cpp" />
-    <ClCompile Include="test2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

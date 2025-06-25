@@ -2,11 +2,21 @@
 #include <fpdfview.h>
 #include <iCVCImg.h>
 
-BOOL renderPageToCVB(FPDF_PAGE page, int dpi, int pageIndex, IMG cvbImg);
+#include <windows.h>//for relative path
+
+
+BOOL renderPageToCVB(FPDF_PAGE page, int dpi, int pageIndex, IMG &cvbImg);
 
 int main()
 {
-    FPDF_STRING documentPath = "C:\\Experimental\\pdfCVB\\pdf2cvb\\test_input\\input.pdf";
+    char buffer[MAX_PATH];
+    GetCurrentDirectoryA(MAX_PATH, buffer);
+    std::string currentPath(buffer);
+    currentPath.resize(currentPath.length() - 9+1);
+
+    std::string relative_docPath = currentPath + "\\test_input\\input.pdf";
+
+    FPDF_STRING documentPath = relative_docPath.c_str();
     FPDF_BYTESTRING documentPassword = NULL;
     const int dpi = 300;
 
@@ -32,7 +42,8 @@ int main()
             std::cout << "failed to convert pdf to CVB image\n";
         }
         if (cvbImg != NULL && IsImage(cvbImg)) {
-            WriteImageFile(cvbImg, "C:\\Experimental\\pdfCVB\\pdf2cvb\\test_input\\output.bmp");
+            std::string relative_outputPath = currentPath + "\\test_input\\output.bmp";
+            WriteImageFile(cvbImg, relative_outputPath.c_str());
         }
         ReleaseObject(cvbImg);
         FPDF_ClosePage(page);
@@ -45,7 +56,7 @@ int main()
 }
 
 
-BOOL renderPageToCVB(FPDF_PAGE page, int dpi, int pageIndex,IMG cvbImg)
+BOOL renderPageToCVB(FPDF_PAGE page, int dpi, int pageIndex,IMG &cvbImg)
 {
 
     const double pdfW = FPDF_GetPageWidth(page);
